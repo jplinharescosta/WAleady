@@ -2,10 +2,14 @@
   "name": "whatsapp-group-manager",
   "version": "1.0.0",
   "description": "WhatsApp Group Manager with Node.js",
-  "main": "src/services/core-service/server.js",
+  "main": "dist/services/core-service/server.js",
   "scripts": {
-    "start": "node src/services/core-service/server.js",
-    "dev": "nodemon src/services/core-service/server.js"
+    "build": "tsc",
+    "start": "node dist/services/core-service/server.js",
+    "start:js": "node src/services/core-service/server.js",
+    "dev": "ts-node src/services/core-service/server.ts",
+    "dev:js": "nodemon src/services/core-service/server.js",
+    "dev:build": "nodemon --exec \"npm run build && npm start\" --ext ts"
   },
   "keywords": [],
   "author": "",
@@ -23,10 +27,15 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.9",
+    "@types/pg": "^8.15.5",
     "eslint": "^9.37.0",
     "eslint-plugin-boundaries": "^5.0.2",
     "globals": "^16.4.0",
     "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
 }
