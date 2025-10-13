@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import { sendValidationError } from '../errors/validationErrorResponse';
-import { PaginationParams } from '../../../types';
+import { Request, Response, NextFunction } from "express";
+import { sendValidationError } from "../errors/validationErrorResponse";
+import { PaginationParams } from "../../../types";
 
 interface ValidationError {
   field: string;
@@ -10,7 +10,7 @@ interface ValidationError {
 export function validatePagination(
   req: Request & { pagination?: PaginationParams },
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void {
   const page = req.query.page !== undefined ? Number(req.query.page) : 1;
   const limit = req.query.limit !== undefined ? Number(req.query.limit) : 10;

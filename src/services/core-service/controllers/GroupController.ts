@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
-import { CreateGroupUseCase } from '../../../core/domain/use-cases/CreateGroupUseCase';
-import { DeleteGroupUseCase } from '../../../core/domain/use-cases/DeleteGroupUseCase';
-import { IGroupRepository } from '../../../core/domain/repositories/interfaces';
-import { CreateGroupRequest, PaginationParams } from '../../../types';
+import { Request, Response } from "express";
+import { CreateGroupUseCase } from "../../../core/domain/use-cases/CreateGroupUseCase";
+import { DeleteGroupUseCase } from "../../../core/domain/use-cases/DeleteGroupUseCase";
+import { IGroupRepository } from "../../../core/domain/repositories/interfaces";
+import { CreateGroupRequest, PaginationParams } from "../../../types";
 
 interface RequestWithPagination extends Request {
   pagination: PaginationParams;
@@ -12,7 +12,7 @@ export class GroupController {
   constructor(
     private createGroupUseCase: CreateGroupUseCase,
     private deleteGroupUseCase: DeleteGroupUseCase,
-    private groupRepository: IGroupRepository
+    private groupRepository: IGroupRepository,
   ) {}
 
   async createGroup(req: Request, res: Response): Promise<void> {
@@ -41,7 +41,8 @@ export class GroupController {
       });
     } catch (error) {
       console.error("Error creating group:", error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       res.status(400).json({
         success: false,
         message: errorMessage,
@@ -60,7 +61,8 @@ export class GroupController {
       });
     } catch (error) {
       console.error("Error deleting group:", error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       res.status(500).json({
         success: false,
         message: errorMessage,
@@ -72,10 +74,10 @@ export class GroupController {
     try {
       const { isActive, createdBy } = req.query;
       const { page = 1, limit = 10 } = req.pagination || { page: 1, limit: 10 };
-      
+
       const pagination: PaginationParams = {
         page: Number(page),
-        limit: Number(limit)
+        limit: Number(limit),
       };
 
       const result = await this.groupRepository.findAll(pagination);
@@ -87,7 +89,8 @@ export class GroupController {
       });
     } catch (error) {
       console.error("Error fetching groups:", error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       res.status(500).json({
         success: false,
         message: errorMessage,
@@ -114,7 +117,32 @@ export class GroupController {
       });
     } catch (error) {
       console.error("Error fetching group:", error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      res.status(500).json({
+        success: false,
+        message: errorMessage,
+      });
+    }
+  }
+
+  async updateGroupById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+
+      const group = await this.groupRepository.update(id, req.body);
+
+      if (!group) {
+        res.status(404).json({
+          success: false,
+          message: "Group not found",
+        });
+        return;
+      }
+    } catch (error) {
+      console.error("Error updating group:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       res.status(500).json({
         success: false,
         message: errorMessage,

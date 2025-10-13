@@ -19,11 +19,11 @@ function ts(): string {
 }
 
 function levelToString(level: LogLevel): string {
-  const map: Record<LogLevel, string> = { 
-    debug: "DEBUG", 
-    info: "INFO", 
-    warn: "WARN", 
-    error: "ERROR" 
+  const map: Record<LogLevel, string> = {
+    debug: "DEBUG",
+    info: "INFO",
+    warn: "WARN",
+    error: "ERROR",
   };
   return map[level] || "INFO";
 }
@@ -37,7 +37,11 @@ function safeSerialize(obj: any): string {
 }
 
 function createBaseLogger(defaultContext: LogContext = {}): Logger {
-  function log(level: LogLevel, messageOrObject: string | LogContext, extra: LogContext = {}): void {
+  function log(
+    level: LogLevel,
+    messageOrObject: string | LogContext,
+    extra: LogContext = {},
+  ): void {
     const base: LogContext = {
       ts: ts(),
       level: levelToString(level),
@@ -71,14 +75,21 @@ function createBaseLogger(defaultContext: LogContext = {}): Logger {
   }
 
   return {
-    debug: (objOrMsg: string | LogContext, extra?: LogContext) => log("debug", objOrMsg, extra),
-    info: (objOrMsg: string | LogContext, extra?: LogContext) => log("info", objOrMsg, extra),
-    warn: (objOrMsg: string | LogContext, extra?: LogContext) => log("warn", objOrMsg, extra),
-    error: (objOrMsg: string | LogContext, extra?: LogContext) => log("error", objOrMsg, extra),
-    child: (ctx: LogContext = {}) => createBaseLogger({ ...defaultContext, ...ctx }),
+    debug: (objOrMsg: string | LogContext, extra?: LogContext) =>
+      log("debug", objOrMsg, extra),
+    info: (objOrMsg: string | LogContext, extra?: LogContext) =>
+      log("info", objOrMsg, extra),
+    warn: (objOrMsg: string | LogContext, extra?: LogContext) =>
+      log("warn", objOrMsg, extra),
+    error: (objOrMsg: string | LogContext, extra?: LogContext) =>
+      log("error", objOrMsg, extra),
+    child: (ctx: LogContext = {}) =>
+      createBaseLogger({ ...defaultContext, ...ctx }),
   };
 }
 
-export function getLogger(context: LoggerOptions = { service: "core" }): Logger {
+export function getLogger(
+  context: LoggerOptions = { service: "core" },
+): Logger {
   return createBaseLogger(context);
 }

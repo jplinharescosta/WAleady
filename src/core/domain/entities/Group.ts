@@ -1,4 +1,4 @@
-import { GroupData } from '../../../types';
+import { GroupData } from "../../../types";
 
 export class Group {
   public readonly id?: string;
@@ -30,7 +30,11 @@ export class Group {
   }
 
   private validateInput(data: GroupData): void {
-    if (!data.name || typeof data.name !== "string" || data.name.trim().length === 0) {
+    if (
+      !data.name ||
+      typeof data.name !== "string" ||
+      data.name.trim().length === 0
+    ) {
       throw new Error("Group name is required and must be a non-empty string");
     }
 

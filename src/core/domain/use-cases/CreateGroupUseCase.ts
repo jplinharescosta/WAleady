@@ -5,7 +5,11 @@ import { IGroupRepository } from "../repositories/interfaces";
 export class CreateGroupUseCase {
   constructor(private groupRepository: IGroupRepository) {}
 
-  async execute({ name, description, createdBy }: CreateGroupRequest): Promise<Group> {
+  async execute({
+    name,
+    description,
+    createdBy,
+  }: CreateGroupRequest): Promise<Group> {
     // 1. Validar dados (a entidade já faz isso)
     const group = new Group({
       name,
@@ -23,7 +27,7 @@ export class CreateGroupUseCase {
     const savedGroup = await this.groupRepository.create(group);
 
     console.log(
-      `📝 Group created: ${savedGroup.name} by ${savedGroup.createdBy}`
+      `📝 Group created: ${savedGroup.name} by ${savedGroup.createdBy}`,
     );
 
     return savedGroup;

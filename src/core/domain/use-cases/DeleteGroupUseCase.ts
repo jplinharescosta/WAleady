@@ -21,10 +21,12 @@ export class DeleteGroupUseCase {
 
     // Deleta do Banco de Dados
     const deleted = await this.groupRepository.delete(id);
-    return { 
-      success: deleted, 
-      message: deleted ? "Group deleted successfully" : "Failed to delete group",
-      data: deleted 
+    return {
+      success: deleted,
+      message: deleted
+        ? "Group deleted successfully"
+        : "Failed to delete group",
+      data: deleted,
     };
   }
 }

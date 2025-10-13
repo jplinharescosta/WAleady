@@ -76,9 +76,11 @@ export class PostgresGroupRepository implements IGroupRepository {
     return this.mapToEntity(result.rows[0]);
   }
 
-  async findAll(pagination: PaginationParams): Promise<PaginatedResponse<Group>> {
+  async findAll(
+    pagination: PaginationParams,
+  ): Promise<PaginatedResponse<Group>> {
     const offset = (pagination.page - 1) * pagination.limit;
-    
+
     // Get total count
     const countQuery = "SELECT COUNT(*) FROM groups";
     const countResult = await pool.query(countQuery);
@@ -91,17 +93,17 @@ export class PostgresGroupRepository implements IGroupRepository {
       LIMIT $1 OFFSET $2
     `;
     const result = await pool.query(query, [pagination.limit, offset]);
-    
+
     const groups = result.rows.map((row: GroupRow) => this.mapToEntity(row));
-    
+
     return {
       data: groups,
       pagination: {
         page: pagination.page,
         limit: pagination.limit,
         total,
-        totalPages: Math.ceil(total / pagination.limit)
-      }
+        totalPages: Math.ceil(total / pagination.limit),
+      },
     };
   }
 
@@ -149,15 +151,15 @@ export class PostgresGroupRepository implements IGroupRepository {
 
     const query = `
       UPDATE groups 
-      SET ${updates.join(', ')} 
+      SET ${updates.join(", ")} 
       WHERE id = $${paramCount} 
       RETURNING *
     `;
 
     const result = await pool.query(query, values);
-    
+
     if (result.rows.length === 0) {
-      throw new Error('Group not found');
+      throw new Error("Group not found");
     }
 
     return this.mapToEntity(result.rows[0]);

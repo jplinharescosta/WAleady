@@ -444,7 +444,7 @@ class Funcionario extends Pessoa {
     idade: number,
     cpf: string,
     cargo: string,
-    salario: number
+    salario: number,
   ) {
     super(id, nome, idade, cpf); // Chama construtor da classe pai
     this.cargo = cargo;
@@ -1087,7 +1087,7 @@ declare global {
 type MiddlewareWithValidation<T> = (
   req: Request & { pagination?: T },
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => void;
 
 // Mapped type para configuração de database
@@ -1109,8 +1109,8 @@ type GroupRoutes = `/api/v1/groups${"" | `/${string}`}`;
 type ApiResponse<T> = T extends Group
   ? { success: true; data: GroupData; message: string }
   : T extends Group[]
-  ? { success: true; data: GroupData[]; pagination: PaginationParams }
-  : { success: boolean; data?: T; message?: string; error?: string };
+    ? { success: true; data: GroupData[]; pagination: PaginationParams }
+    : { success: boolean; data?: T; message?: string; error?: string };
 ```
 
 ---
@@ -1309,7 +1309,7 @@ export class PostgresGroupRepository implements IGroupRepository {
 
   // ✅ Generic method com paginação
   async findAll(
-    pagination: PaginationParams
+    pagination: PaginationParams,
   ): Promise<PaginatedResponse<Group>> {
     const offset = (pagination.page - 1) * pagination.limit;
 
@@ -1434,7 +1434,7 @@ export class GroupController {
   constructor(
     private createGroupUseCase: CreateGroupUseCase, // Private shorthand
     private deleteGroupUseCase: DeleteGroupUseCase,
-    private groupRepository: IGroupRepository
+    private groupRepository: IGroupRepository,
   ) {}
 
   // ✅ Express handler com async/await

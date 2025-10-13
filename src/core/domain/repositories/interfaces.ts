@@ -1,5 +1,5 @@
-import { Group } from '../entities/Group';
-import { PaginationParams, PaginatedResponse } from '../../../types';
+import { Group } from "../entities/Group";
+import { PaginationParams, PaginatedResponse } from "../../../types";
 
 export interface IGroupRepository {
   create(group: Group): Promise<Group>;

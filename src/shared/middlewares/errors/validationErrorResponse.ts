@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response } from "express";
 
 interface ValidationError {
   field: string | null;
@@ -54,7 +54,7 @@ export function sendValidationError(
   res: Response,
   details: any,
   message: string = "Invalid data provided.",
-  status: number = 400
+  status: number = 400,
 ): Response {
   const normalized = normalizeDetails(details);
 

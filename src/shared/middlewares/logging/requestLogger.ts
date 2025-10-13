@@ -15,7 +15,7 @@ function genRequestId(): string {
 export default function requestLogger(
   req: RequestWithLogging,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void {
   const requestId = genRequestId();
   const start = process.hrtime.bigint();

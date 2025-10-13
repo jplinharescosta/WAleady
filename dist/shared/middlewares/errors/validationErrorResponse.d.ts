@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response } from "express";
 /**
  * Sends a standardized validation response.
  * @param res - Express Response
@@ -6,4 +6,9 @@ import { Response } from 'express';
  * @param message - Main message
  * @param status - HTTP status code (default 400)
  */
-export declare function sendValidationError(res: Response, details: any, message?: string, status?: number): Response;
+export declare function sendValidationError(
+  res: Response,
+  details: any,
+  message?: string,
+  status?: number,
+): Response;

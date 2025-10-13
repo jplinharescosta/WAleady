@@ -7,9 +7,10 @@
     "build": "tsc",
     "start": "node dist/services/core-service/server.js",
     "start:js": "node src/services/core-service/server.js",
-    "dev": "ts-node src/services/core-service/server.ts",
+    "dev": "nodemon --exec ts-node src/services/core-service/server.ts",
     "dev:js": "nodemon src/services/core-service/server.js",
-    "dev:build": "nodemon --exec \"npm run build && npm start\" --ext ts"
+    "dev:build": "nodemon --exec \"npm run build && npm start\" --ext ts",
+    "dev:watch": "tsc --watch"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +36,7 @@
     "eslint-plugin-boundaries": "^5.0.2",
     "globals": "^16.4.0",
     "nodemon": "^3.1.10",
+    "prettier": "3.6.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

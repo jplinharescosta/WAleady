@@ -10,7 +10,9 @@ import { SendBroadcastUseCase } from "../../../core/domain/use-cases/SendBroadca
 const redisBroadcastRepository = new RedisBroadcastRepository();
 const sendBroadcastUseCase = new SendBroadcastUseCase(redisBroadcastRepository);
 
-export const broadcastController = new BroadcastController(sendBroadcastUseCase);
+export const broadcastController = new BroadcastController(
+  sendBroadcastUseCase,
+);
 
 // Group Controller Setup
 const groupRepository = new PostgresGroupRepository();
@@ -20,5 +22,5 @@ const deleteGroupUseCase = new DeleteGroupUseCase(groupRepository);
 export const groupController = new GroupController(
   createGroupUseCase,
   deleteGroupUseCase,
-  groupRepository
+  groupRepository,
 );

@@ -1,7 +1,6 @@
 import "dotenv/config";
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import { ErrorRequestHandler } from "express";
-import pool from "../../shared/config/database";
 import { getLogger } from "../../shared/logger/logger";
 import requestLogger from "../../shared/middlewares/logging/requestLogger";
 
