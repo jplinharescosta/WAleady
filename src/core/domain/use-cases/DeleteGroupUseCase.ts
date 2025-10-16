@@ -1,5 +1,5 @@
-import { IGroupRepository } from "../repositories/interfaces";
-import { ApiResponse } from "../../../types";
+import { IGroupRepository } from '../repositories/interfaces';
+import { ApiResponse } from '../../../types';
 
 export class DeleteGroupUseCase {
   constructor(private groupRepository: IGroupRepository) {}
@@ -7,16 +7,16 @@ export class DeleteGroupUseCase {
   async execute(id: string): Promise<ApiResponse<boolean>> {
     // Validar ID
     if (!id) {
-      throw new Error("Invalid group ID");
+      throw new Error('Invalid group ID');
     }
-    if (typeof id !== "string") {
-      throw new Error("Group ID must be a string");
+    if (typeof id !== 'string') {
+      throw new Error('Group ID must be a string');
     }
 
     // Verificar se o grupo existe
     const group = await this.groupRepository.findById(id);
     if (!group) {
-      return { success: false, message: "Group not found" };
+      return { success: false, message: 'Group not found' };
     }
 
     // Deleta do Banco de Dados
@@ -24,9 +24,9 @@ export class DeleteGroupUseCase {
     return {
       success: deleted,
       message: deleted
-        ? "Group deleted successfully"
-        : "Failed to delete group",
-      data: deleted,
+        ? 'Group deleted successfully'
+        : 'Failed to delete group',
+      data: deleted
     };
   }
 }

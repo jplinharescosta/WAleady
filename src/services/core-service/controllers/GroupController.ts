@@ -1,8 +1,14 @@
-import { Request, Response } from "express";
-import { CreateGroupUseCase } from "../../../core/domain/use-cases/CreateGroupUseCase";
-import { DeleteGroupUseCase } from "../../../core/domain/use-cases/DeleteGroupUseCase";
-import { IGroupRepository } from "../../../core/domain/repositories/interfaces";
-import { CreateGroupRequest, PaginationParams } from "../../../types";
+import { Request, Response } from 'express';
+import { CreateGroupUseCase } from '../../../core/domain/use-cases/CreateGroupUseCase';
+import { DeleteGroupUseCase } from '../../../core/domain/use-cases/DeleteGroupUseCase';
+import { IGroupRepository } from '../../../core/domain/repositories/interfaces';
+import { CreateGroupRequest, PaginationParams } from '../../../types';
+import { UpdateGroupUseCase } from '@/core/domain/use-cases/UpdateGroupUseCase';
+import {
+  NotFoundError,
+  ValidationError
+} from '../../../shared/middlewares/errors/CustomErrors';
+import { sendValidationError } from '../../../shared/middlewares/errors/validationErrorResponse';
 
 interface RequestWithPagination extends Request {
   pagination: PaginationParams;
@@ -12,7 +18,8 @@ export class GroupController {
   constructor(
     private createGroupUseCase: CreateGroupUseCase,
     private deleteGroupUseCase: DeleteGroupUseCase,
-    private groupRepository: IGroupRepository,
+    private updateGroupUseCase: UpdateGroupUseCase,
+    private groupRepository: IGroupRepository
   ) {}
 
   async createGroup(req: Request, res: Response): Promise<void> {
@@ -23,7 +30,7 @@ export class GroupController {
       if (!name || !createdBy) {
         res.status(400).json({
           success: false,
-          message: "Name and createdBy are required",
+          message: 'Name and createdBy are required'
         });
         return;
       }
@@ -31,21 +38,21 @@ export class GroupController {
       const group = await this.createGroupUseCase.execute({
         name,
         description,
-        createdBy,
+        createdBy
       });
 
       res.status(201).json({
         success: true,
         data: group.toJSON(),
-        message: "Group created successfully",
+        message: 'Group created successfully'
       });
     } catch (error) {
-      console.error("Error creating group:", error);
+      console.error('Error creating group:', error);
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+        error instanceof Error ? error.message : 'Unknown error';
       res.status(400).json({
         success: false,
-        message: errorMessage,
+        message: errorMessage
       });
     }
   }
@@ -57,15 +64,15 @@ export class GroupController {
 
       res.status(200).json({
         success: true,
-        message: result.message,
+        message: result.message
       });
     } catch (error) {
-      console.error("Error deleting group:", error);
+      console.error('Error deleting group:', error);
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+        error instanceof Error ? error.message : 'Unknown error';
       res.status(500).json({
         success: false,
-        message: errorMessage,
+        message: errorMessage
       });
     }
   }
@@ -77,7 +84,7 @@ export class GroupController {
 
       const pagination: PaginationParams = {
         page: Number(page),
-        limit: Number(limit),
+        limit: Number(limit)
       };
 
       const result = await this.groupRepository.findAll(pagination);
@@ -85,15 +92,15 @@ export class GroupController {
       res.status(200).json({
         success: true,
         data: result.data.map((group) => group.toJSON()),
-        pagination: result.pagination,
+        pagination: result.pagination
       });
     } catch (error) {
-      console.error("Error fetching groups:", error);
+      console.error('Error fetching groups:', error);
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+        error instanceof Error ? error.message : 'Unknown error';
       res.status(500).json({
         success: false,
-        message: errorMessage,
+        message: errorMessage
       });
     }
   }
@@ -106,47 +113,59 @@ export class GroupController {
       if (!group) {
         res.status(404).json({
           success: false,
-          message: "Group not found",
+          message: 'Group not found'
         });
         return;
       }
 
       res.status(200).json({
         success: true,
-        data: group.toJSON(),
+        data: group.toJSON()
       });
     } catch (error) {
-      console.error("Error fetching group:", error);
+      console.error('Error fetching group:', error);
       const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
+        error instanceof Error ? error.message : 'Unknown error';
       res.status(500).json({
         success: false,
-        message: errorMessage,
+        message: errorMessage
       });
     }
   }
 
-  async updateGroupById(req: Request, res: Response): Promise<void> {
+  async updateGroupById(
+    req: Request,
+    res: Response
+  ): Promise<void | ValidationError | Response<void, Record<string, any>>> {
     try {
       const { id } = req.params;
 
-      const group = await this.groupRepository.update(id, req.body);
+      const group = await this.updateGroupUseCase.execute(id, req.body);
 
-      if (!group) {
-        res.status(404).json({
-          success: false,
-          message: "Group not found",
-        });
-        return;
-      }
-    } catch (error) {
-      console.error("Error updating group:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error";
-      res.status(500).json({
-        success: false,
-        message: errorMessage,
+      res.status(200).json({
+        success: true,
+        data: group.toJSON()
       });
+    } catch (error) {
+      console.error('Error updating group:', error);
+      if (error instanceof ValidationError) {
+        return sendValidationError(
+          res,
+          error.details,
+          error.message,
+          400,
+          error.code
+        );
+      }
+      if (error instanceof NotFoundError) {
+        return sendValidationError(
+          res,
+          error.details,
+          error.message,
+          404,
+          error.code
+        );
+      }
     }
   }
 }

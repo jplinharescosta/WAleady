@@ -1,5 +1,5 @@
-import { Pool, PoolConfig } from "pg";
-import "dotenv/config";
+import { Pool, PoolConfig } from 'pg';
+import 'dotenv/config';
 
 const dbConfig: PoolConfig = {
   host: process.env.DB_HOST,
@@ -9,17 +9,17 @@ const dbConfig: PoolConfig = {
   password: process.env.DB_PASSWORD,
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
+  connectionTimeoutMillis: 2000
 };
 
 const pool = new Pool(dbConfig);
 
-pool.on("connect", () => {
-  console.log("✅ Connected to PostgreSQL database");
+pool.on('connect', () => {
+  console.log('✅ Connected to PostgreSQL database');
 });
 
-pool.on("error", (err: Error) => {
-  console.error("❌ PostgreSQL connection error:", err);
+pool.on('error', (err: Error) => {
+  console.error('❌ PostgreSQL connection error:', err);
 });
 
 export default pool;

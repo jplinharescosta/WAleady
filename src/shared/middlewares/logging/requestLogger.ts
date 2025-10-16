@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { getLogger } from "../../logger/logger";
+import { Request, Response, NextFunction } from 'express';
+import { getLogger } from '../../logger/logger';
 
 interface RequestWithLogging extends Request {
   requestId?: string;
@@ -15,25 +15,25 @@ function genRequestId(): string {
 export default function requestLogger(
   req: RequestWithLogging,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): void {
   const requestId = genRequestId();
   const start = process.hrtime.bigint();
 
-  const baseLogger = getLogger({ service: "core", requestId });
+  const baseLogger = getLogger({ service: 'core', requestId });
   req.requestId = requestId;
   req.log = baseLogger.child({ route: req.path, method: req.method });
 
-  req.log.info({ msg: "request:start" });
+  req.log.info({ msg: 'request:start' });
 
-  res.on("finish", () => {
+  res.on('finish', () => {
     const end = process.hrtime.bigint();
     const durationMs = Number(end - start) / 1e6;
 
     req.log.info({
-      msg: "request:end",
+      msg: 'request:end',
       status: res.statusCode,
-      durationMs: Number(durationMs.toFixed(2)),
+      durationMs: Number(durationMs.toFixed(2))
     });
   });
 

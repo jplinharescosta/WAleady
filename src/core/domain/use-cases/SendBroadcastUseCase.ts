@@ -1,5 +1,5 @@
-import { BroadcastData, BroadcastResult } from "../../../types";
-import { IBroadcastRepository } from "../repositories/interfaces";
+import { BroadcastData, BroadcastResult } from '../../../types';
+import { IBroadcastRepository } from '../repositories/interfaces';
 
 export class SendBroadcastUseCase {
   constructor(private broadcastRepository: IBroadcastRepository) {}

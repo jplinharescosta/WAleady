@@ -1,4 +1,4 @@
-import { GroupData } from "../../../types";
+import { GroupData } from '../../../types';
 
 export class Group {
   public readonly id?: string;
@@ -32,18 +32,18 @@ export class Group {
   private validateInput(data: GroupData): void {
     if (
       !data.name ||
-      typeof data.name !== "string" ||
+      typeof data.name !== 'string' ||
       data.name.trim().length === 0
     ) {
-      throw new Error("Group name is required and must be a non-empty string");
+      throw new Error('Group name is required and must be a non-empty string');
     }
 
     if (data.name.length > 100) {
-      throw new Error("Group name cannot exceed 100 characters");
+      throw new Error('Group name cannot exceed 100 characters');
     }
 
-    if (!data.createdBy || typeof data.createdBy !== "string") {
-      throw new Error("Group creator is required and must be a string");
+    if (!data.createdBy || typeof data.createdBy !== 'string') {
+      throw new Error('Group creator is required and must be a string');
     }
   }
 
@@ -64,7 +64,7 @@ export class Group {
       participantsCount: this.participantsCount,
       whatsappGroupInviteLink: this.whatsappGroupInviteLink,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
+      updatedAt: this.updatedAt
     };
   }
 }

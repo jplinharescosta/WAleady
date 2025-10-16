@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response } from 'express';
 
 interface ValidationError {
   field: string | null;
@@ -16,27 +16,27 @@ function normalizeDetails(details: any): ValidationError[] {
   if (!details) return [];
 
   // If it's a string, convert to default object
-  if (typeof details === "string") {
+  if (typeof details === 'string') {
     return [{ field: null, issue: details }];
   }
 
   // If it's a single object with field/issue, put in array
-  if (!Array.isArray(details) && typeof details === "object") {
-    const { field = null, issue = "invalid" } = details;
+  if (!Array.isArray(details) && typeof details === 'object') {
+    const { field = null, issue = 'invalid' } = details;
     return [{ field, issue }];
   }
 
   // If it's an array, map ensuring the shape
   if (Array.isArray(details)) {
     return details.map((d: any) => {
-      if (typeof d === "string") {
+      if (typeof d === 'string') {
         return { field: null, issue: d };
       }
-      if (typeof d === "object") {
-        const { field = null, issue = "invalid" } = d;
+      if (typeof d === 'object') {
+        const { field = null, issue = 'invalid' } = d;
         return { field, issue };
       }
-      return { field: null, issue: "invalid" };
+      return { field: null, issue: 'invalid' };
     });
   }
 
@@ -49,21 +49,23 @@ function normalizeDetails(details: any): ValidationError[] {
  * @param details - Error details
  * @param message - Main message
  * @param status - HTTP status code (default 400)
+ * @param code - Error code (default 'VALIDATION_ERROR')
  */
 export function sendValidationError(
   res: Response,
   details: any,
-  message: string = "Invalid data provided.",
+  message: string = 'Invalid data provided.',
   status: number = 400,
+  code: string = 'VALIDATION_ERROR'
 ): Response {
   const normalized = normalizeDetails(details);
 
   return res.status(status).json({
     success: false,
     error: {
-      code: "VALIDATION_ERROR",
+      code,
       message,
-      details: normalized,
-    },
+      details: normalized
+    }
   });
 }

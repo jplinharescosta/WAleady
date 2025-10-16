@@ -1,8 +1,7 @@
-import { Group } from "../../../../domain/entities/Group";
-import { IGroupRepository } from "../../../../domain/repositories/interfaces";
-import { PaginationParams, PaginatedResponse } from "../../../../../types";
-import { Pool, PoolClient } from "pg";
-import pool from "../../../../../shared/config/database";
+import { Group } from '../../../../domain/entities/Group';
+import { IGroupRepository } from '../../../../domain/repositories/interfaces';
+import { PaginationParams, PaginatedResponse } from '../../../../../types';
+import pool from '../../../../../shared/config/database';
 
 interface GroupFilters {
   isActive?: boolean;
@@ -41,7 +40,7 @@ export class PostgresGroupRepository implements IGroupRepository {
       group.whatsappGroupInviteLink,
       group.whatsappGroupId,
       group.isActive,
-      group.isFull,
+      group.isFull
     ];
 
     const result = await pool.query(query, values);
@@ -49,13 +48,13 @@ export class PostgresGroupRepository implements IGroupRepository {
   }
 
   async delete(id: string): Promise<boolean> {
-    const query = "DELETE FROM groups WHERE id = $1";
+    const query = 'DELETE FROM groups WHERE id = $1';
     const result = await pool.query(query, [id]);
     return (result.rowCount ?? 0) > 0;
   }
 
   async findById(id: string): Promise<Group | null> {
-    const query = "SELECT * FROM groups WHERE id = $1";
+    const query = 'SELECT * FROM groups WHERE id = $1';
     const result = await pool.query(query, [id]);
 
     if (result.rows.length === 0) {
@@ -66,7 +65,7 @@ export class PostgresGroupRepository implements IGroupRepository {
   }
 
   async findByName(name: string): Promise<Group | null> {
-    const query = "SELECT * FROM groups WHERE name = $1";
+    const query = 'SELECT * FROM groups WHERE name = $1';
     const result = await pool.query(query, [name]);
 
     if (result.rows.length === 0) {
@@ -77,12 +76,12 @@ export class PostgresGroupRepository implements IGroupRepository {
   }
 
   async findAll(
-    pagination: PaginationParams,
+    pagination: PaginationParams
   ): Promise<PaginatedResponse<Group>> {
     const offset = (pagination.page - 1) * pagination.limit;
 
     // Get total count
-    const countQuery = "SELECT COUNT(*) FROM groups";
+    const countQuery = 'SELECT COUNT(*) FROM groups';
     const countResult = await pool.query(countQuery);
     const total = parseInt(countResult.rows[0].count);
 
@@ -102,8 +101,8 @@ export class PostgresGroupRepository implements IGroupRepository {
         page: pagination.page,
         limit: pagination.limit,
         total,
-        totalPages: Math.ceil(total / pagination.limit),
-      },
+        totalPages: Math.ceil(total / pagination.limit)
+      }
     };
   }
 
@@ -151,7 +150,7 @@ export class PostgresGroupRepository implements IGroupRepository {
 
     const query = `
       UPDATE groups 
-      SET ${updates.join(", ")} 
+      SET ${updates.join(', ')} 
       WHERE id = $${paramCount} 
       RETURNING *
     `;
@@ -159,7 +158,7 @@ export class PostgresGroupRepository implements IGroupRepository {
     const result = await pool.query(query, values);
 
     if (result.rows.length === 0) {
-      throw new Error("Group not found");
+      throw new Error('Group not found');
     }
 
     return this.mapToEntity(result.rows[0]);
@@ -168,13 +167,13 @@ export class PostgresGroupRepository implements IGroupRepository {
   private mapToEntity(row: GroupRow): Group {
     // Verificar se todos os campos obrigatórios existem
     if (!row.name) {
-      console.error("❌ Missing name in database row:", row);
-      throw new Error("Database row missing required name field");
+      console.error('❌ Missing name in database row:', row);
+      throw new Error('Database row missing required name field');
     }
 
     if (!row.created_by) {
-      console.error("❌ Missing created_by in database row:", row);
-      throw new Error("Database row missing required created_by field");
+      console.error('❌ Missing created_by in database row:', row);
+      throw new Error('Database row missing required created_by field');
     }
 
     return new Group({
@@ -188,7 +187,7 @@ export class PostgresGroupRepository implements IGroupRepository {
       isActive: row.is_active,
       isFull: row.is_full,
       createdAt: row.created_at,
-      updatedAt: row.updated_at,
+      updatedAt: row.updated_at
     });
   }
 }

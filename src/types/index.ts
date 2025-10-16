@@ -12,10 +12,19 @@ export interface GroupData {
   updatedAt?: Date;
 }
 
+export interface CustomErrors {
+  field: string | null;
+  issue: string;
+}
+
 export interface CreateGroupRequest {
   name: string;
   description?: string;
   createdBy: string;
+}
+
+export interface UpdateGroupRequest extends Partial<GroupData> {
+  name: string;
 }
 
 export interface BroadcastData {
