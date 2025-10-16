@@ -229,10 +229,10 @@ async updateGroupById(req: Request, res: Response): Promise<void> {
     });
   } catch (error) {
     if (error instanceof ValidationError) {
-      return sendValidationError(res, error.issue, error.message, 400);
+      return sendValidationError(res, error.details, error.message, 400, error.code);
     }
     if (error instanceof NotFoundError) {
-      return sendValidationError(res, error.issue, error.message, 404);
+      return sendValidationError(res, error.details, error.message, 404, error.code);
     }
     // Erro genérico
     console.error('Error updating group:', error);
