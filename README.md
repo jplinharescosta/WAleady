@@ -210,10 +210,10 @@ whatsapp-group-manager/
 
 **O que fazer:**
 
-- [X] Atualizar `GroupController.updateGroupById()` para usar os custom errors
-- [X] Mapear `ValidationError` → HTTP 400
-- [X] Mapear `NotFoundError` → HTTP 404
-- [X] Integrar com `sendValidationError()`
+- ✅ Atualizar `GroupController.updateGroupById()` para usar os custom errors
+- ✅ Mapear `ValidationError` → HTTP 400
+- ✅ Mapear `NotFoundError` → HTTP 404
+- ✅ Integrar com `sendValidationError()`
 
 **Exemplo de implementação:**
 
