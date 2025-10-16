@@ -1,6 +1,6 @@
-# 🚀 WhatsApp Group Manager
+# 🚀 WAleady
 
-API RESTful para gerenciamento de grupos do WhatsApp construída com Node.js, TypeScript, Express, PostgreSQL e Redis.
+API RESTful para gerenciamento de grupos do WhatsApp construída com Node.js, TypeScript, Express, PostgreSQL, Redis e Baileys.
 
 ## 📋 Índice
 
